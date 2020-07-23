@@ -1,19 +1,21 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
+import { Component, OnInit, ViewChild, OnDestroy, Input } from '@angular/core';
 import { MatTableDataSource } from '@angular/material/table';
-import { Apartment } from 'src/app/core/models';
-import { create } from 'domain';
 import { MatSort } from '@angular/material/sort';
-import { MatPaginator } from '@angular/material/paginator';
+import { MatDialog } from '@angular/material/dialog';
+
+import { Observable, Subject, of } from 'rxjs';
+import { map, tap, take, takeUntil, filter, switchMap } from 'rxjs/operators';
+
+import { Apartment } from 'src/app/core/models';
 import { ApartmentManagementService } from '../../services';
-import { Observable } from 'rxjs';
-import { map, tap } from 'rxjs/operators';
+import { EditItemModalComponent } from '../modals/edit-item-modal/edit-item-modal.component';
 
 @Component({
   selector: 'app-apartment-list',
   templateUrl: './apartment-list.component.html',
   styleUrls: ['./apartment-list.component.scss']
 })
-export class ApartmentListComponent implements OnInit {
+export class ApartmentListComponent implements OnInit, OnDestroy {
 
   displayedColumns: (keyof Apartment)[] = [
     'name',
@@ -26,35 +28,55 @@ export class ApartmentListComponent implements OnInit {
     'created',
     'status',
   ];
-  dataSource: MatTableDataSource<Apartment>;
-  apartments$: Observable<MatTableDataSource<Apartment[]>>;
+  apartments$: Observable<MatTableDataSource<Apartment>>;
+  private onDestroy$: Subject<void> = new Subject();
+  cmp = EditItemModalComponent;
 
-  @ViewChild(MatPaginator, { static: true }) paginator: MatPaginator;
   @ViewChild(MatSort, { static: true }) sort: MatSort;
 
   constructor(
     private apartmentService: ApartmentManagementService,
+    private dialog: MatDialog,
   ) { }
 
   ngOnInit(): void {
-    this.apartments$ = this.apartmentService.apartments$.pipe(
-      tap(console.log),
-      map((apartments: Apartment[]) => new MatTableDataSource(apartments)),
-      tap(console.log),
-    );
-    // this.apartmentService.loadApartments().subscribe((apartments: Apartment[]) => {
-    //   console.log('APARTMENTS', apartments);
-    //   this.dataSource = new MatTableDataSource(apartments);
-    // });
+    this.initApartments();
   }
 
-  applyFilter(event: Event): void {
-    const filterValue = (event.target as HTMLInputElement).value;
-    this.dataSource.filter = filterValue.trim().toLowerCase();
+  private initApartments(): void {
+    this.apartmentService.loadApartments().pipe(
+      take(1),
+      takeUntil(this.onDestroy$),
+    ).subscribe();
 
-    if (this.dataSource.paginator) {
-      this.dataSource.paginator.firstPage();
-    }
+    this.apartments$ = this.apartmentService.apartments$.pipe(
+      filter((apartments: Apartment[]) => Boolean(apartments.length)),
+      map((apartments: Apartment[]) => new MatTableDataSource(apartments)),
+    );
+
+  }
+
+  openDialog(action: 'Add', item: Apartment): void {
+    const dialogRef = this.dialog.open(EditItemModalComponent, {
+      minWidth: '500px',
+      data: { action, item, itemText: item.name },
+    });
+
+    dialogRef.afterClosed().pipe(
+      switchMap((result: any) => {
+        if (!!result && result.action === 'Add') {
+          return this.apartmentService.createApartment(result.item);
+        }
+        return of();
+      }),
+      take(1),
+      takeUntil(this.onDestroy$),
+    ).subscribe();
+  }
+
+  ngOnDestroy(): void {
+    this.onDestroy$.next();
+    this.onDestroy$.complete();
   }
 
 }

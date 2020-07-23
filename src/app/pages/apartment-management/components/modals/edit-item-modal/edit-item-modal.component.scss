@@ -1,0 +1,15 @@
+mat-form-field {
+  width: 100%;
+}
+
+.header,
+.coords,
+.info {
+  display: flex;
+}
+
+.actions {
+  button {
+    margin-right: 10px;
+  }
+}

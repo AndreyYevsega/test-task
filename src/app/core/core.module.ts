@@ -1,10 +1,16 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 
-import { AuthGuard } from './auth/auth.guard';
-import { NoAuthGuard } from './auth/no-auth.guard';
+import { AuthGuard, NoAuthGuard, AdminGuard, } from './auth/guards';
 import { AuthModule, } from './auth/auth.module';
 import { ApiModule, } from './api/api.module';
+
+
+const GUARDS = [
+  AuthGuard,
+  NoAuthGuard,
+  AdminGuard,
+];
 
 @NgModule({
   declarations: [],
@@ -14,8 +20,7 @@ import { ApiModule, } from './api/api.module';
     ApiModule,
   ],
   providers: [
-    AuthGuard,
-    NoAuthGuard,
+    GUARDS,
   ]
 })
 export class CoreModule { }

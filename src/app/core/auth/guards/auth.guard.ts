@@ -6,7 +6,7 @@ import {
   RouterStateSnapshot,
   CanLoad
 } from '@angular/router';
-import { AuthService } from './auth.service';
+import { AuthService } from '../auth.service';
 import { Observable } from 'rxjs';
 import { tap, } from 'rxjs/operators';
 
@@ -20,7 +20,6 @@ export class AuthGuard implements CanActivate, CanLoad {
   private checkIsLoggedIn(): Observable<boolean> {
     return this.authService.isLoggedIn$.pipe(
       tap((isLoggedIn: boolean) => {
-        console.log('AuthGuard', isLoggedIn);
         if (!isLoggedIn) {
           this.router.navigate(['/auth/login']);
         }

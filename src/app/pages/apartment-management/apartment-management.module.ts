@@ -4,16 +4,26 @@ import { ApartmentListComponent } from './components/apartment-list/apartment-li
 import { RouterModule, Route } from '@angular/router';
 import { SharedModule } from 'src/app/shared/shared.module';
 import { ApartmentManagementService } from './services';
+import { ApartmentViewComponent } from './components/apartment-view/apartment-view.component';
+import { EditItemModalComponent } from './components/modals/edit-item-modal/edit-item-modal.component';
 
 const routes: Route[] = [
   {
     path: '',
     component: ApartmentListComponent,
-  }
+  },
+  {
+    path: ':id',
+    component: ApartmentViewComponent,
+  },
 ];
 
 @NgModule({
-  declarations: [ApartmentListComponent],
+  declarations: [
+    ApartmentListComponent,
+    ApartmentViewComponent,
+    EditItemModalComponent,
+  ],
   imports: [
     CommonModule,
     RouterModule.forChild(routes),

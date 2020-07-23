@@ -1,0 +1,89 @@
+<mat-card>
+  <mat-card-title>{{ data.action || "Add" }} User</mat-card-title>
+  <mat-card-content>
+    <form [formGroup]="form">
+      <p class="header">
+        <mat-form-field>
+          <input
+            type="text"
+            matInput
+            placeholder="First Name"
+            formControlName="firstname"
+          />
+        </mat-form-field>
+
+        <mat-form-field>
+          <input
+            type="text"
+            matInput
+            placeholder="Last Name"
+            formControlName="lastname"
+          />
+        </mat-form-field>
+      </p>
+
+      <p>
+        <mat-form-field>
+          <mat-label>Verified</mat-label>
+          <mat-select formControlName="verified" placeholder="Verified">
+            <ng-container>
+              <mat-option [value]="true">Yes</mat-option>
+              <mat-option [value]="false">No</mat-option>
+            </ng-container>
+          </mat-select>
+        </mat-form-field>
+      </p>
+
+      <p>
+        <mat-form-field>
+          <input
+            type="text"
+            matInput
+            placeholder="Email"
+            formControlName="email"
+          />
+        </mat-form-field>
+      </p>
+
+      <p>
+        <mat-form-field>
+          <input
+            type="password"
+            matInput
+            placeholder="Password"
+            formControlName="password"
+          />
+        </mat-form-field>
+      </p>
+
+      <p>
+        <mat-form-field>
+          <mat-label>Role</mat-label>
+          <mat-select
+            formControlName="role"
+            placeholder="Role"
+          >
+            <ng-container *ngFor="let role of roles">
+              <mat-option [value]="role">{{ role }}</mat-option>
+            </ng-container>
+          </mat-select>
+          <!-- <input
+            type="text"
+            matInput
+            placeholder="Role"
+            formControlName="role"
+          /> -->
+        </mat-form-field>
+      </p>
+
+      <div class="actions">
+        <button mat-flat-button color="primary" (click)="submit()">
+          {{ "Update" | uppercase }}
+        </button>
+        <button mat-stroked-button color="primary" mat-dialog-close>
+          {{ "Cancel" | uppercase }}
+        </button>
+      </div>
+    </form>
+  </mat-card-content>
+</mat-card>

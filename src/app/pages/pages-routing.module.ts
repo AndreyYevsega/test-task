@@ -1,8 +1,8 @@
 import { RouterModule, Routes } from '@angular/router';
 import { NgModule } from '@angular/core';
 
+import { AuthGuard, AdminGuard } from '../core/auth/guards';
 import { PagesComponent } from './pages.component';
-import { AuthGuard } from '../core/auth/auth.guard';
 import { PageNotFoundComponent } from 'src/app/shared/page-not-found/page-not-found.component';
 
 const routes: Routes = [
@@ -14,18 +14,18 @@ const routes: Routes = [
         path: '',
         redirectTo: 'apartments',
         pathMatch: 'full',
-        // canActivate: [AuthGuard],
-        // data: {
-        // 	expectedRole: [
-        // 		RolesEnum.ADMIN
-        // 	]
-        // }
       },
       {
         path: 'apartments',
         loadChildren: () =>
           import('./apartment-management/apartment-management.module').then((m) => m.ApartmentManagementModule),
         canActivate: [AuthGuard]
+      },
+      {
+        path: 'users',
+        loadChildren: () =>
+          import('./users/users.module').then((m) => m.UsersModule),
+        canActivate: [AuthGuard, AdminGuard]
       },
       {
         path: '**',

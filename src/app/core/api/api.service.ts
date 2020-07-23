@@ -13,7 +13,7 @@ export class ApiService {
     private http$: HttpClient,
   ) { }
 
-  protected get<T>(path: string): Observable<T> {
+  get<T>(path: string): Observable<T> {
     return this.http$.get<ApiResponse<T>>(path).pipe(
       // map((response: any) => {
       //   return response.data;
@@ -22,10 +22,20 @@ export class ApiService {
     );
   }
 
-  protected post<T, K>(path: string, payload: T): Observable<K> {
+  post<T, K>(path: string, payload: T): Observable<K> {
     return this.http$.post<ApiResponse<K>>(path, payload).pipe(
       map(this.mapResponseToData),
     );
+  }
+
+  put<T, K>(path: string, payload: T): Observable<K> {
+    return this.http$.put<ApiResponse<K>>(path, payload).pipe(
+      map(this.mapResponseToData),
+    );
+  }
+
+  delete<T>(path: string): Observable<T> {
+    return this.http$.delete<T>(path);
   }
 
   private mapResponseToData<T>({ success, data }: ApiResponse<T>): T {

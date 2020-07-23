@@ -5,7 +5,7 @@ import {
   Router,
   RouterStateSnapshot
 } from '@angular/router';
-import { AuthService } from './auth.service';
+import { AuthService } from '../auth.service';
 import { Observable } from 'rxjs';
 import { tap, map, } from 'rxjs/operators';
 
@@ -22,7 +22,6 @@ export class NoAuthGuard implements CanActivate {
   ): Observable<boolean> {
     return this.authService.isLoggedIn$.pipe(
       tap((isLoggedIn: boolean) => {
-        console.log('NoAuthGuard', isLoggedIn);
         if (!!isLoggedIn) {
           this.router.navigate(['/pages']);
         }

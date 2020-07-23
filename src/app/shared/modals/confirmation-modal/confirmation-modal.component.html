@@ -1,0 +1,30 @@
+<section>
+  <div class="dialog-wrapper">
+    <h1 mat-dialog-title>{{data.action || 'delete' | titlecase}} {{ data.itemText || 'this record' | titlecase }}?</h1>
+    <mat-dialog-content>
+      <p>Are you sure you want to {{data.action || 'delete'}} {{ data.itemText || 'this record' }}?</p>
+      <mat-form-field *ngIf="data.isCritical">
+        <div class="input-wrapper">
+        <mat-label>Enter: "DELETE" to confirm</mat-label>
+          <input
+            matInput
+            [(ngModel)]="data.userInput"
+            placeholder="DELETE"
+          />
+        </div>
+      </mat-form-field>
+    </mat-dialog-content>
+    <mat-dialog-actions>
+      <button
+        mat-flat-button
+        color="primary"
+        [mat-dialog-close]="data"
+      >
+        {{ (data.confirmBtnText ? data.confirmBtnText : 'Yes') | uppercase }}
+      </button>
+      <button mat-stroked-button color="primary" mat-dialog-close>
+        {{ 'Cancel' | uppercase }}
+      </button>
+    </mat-dialog-actions>
+  </div>
+</section>

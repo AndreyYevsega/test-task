@@ -15,7 +15,7 @@ import { UserRole } from 'src/app/core/models';
 @Directive({
   selector: '[appUserHasRoles]'
 })
-export class UserHasRoleDirective implements OnInit, OnDestroy {
+export class UserHasRolesDirective implements OnInit, OnDestroy {
   @Input() appUserHasRoles: string[];
   onDestroy$: Subject<void> = new Subject();
   isVisible = false;

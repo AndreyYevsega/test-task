@@ -1,0 +1,18 @@
+<mat-card class="card" *ngIf="apartment$ | async as apartment">
+  <mat-card-header>
+    <mat-card-title>[{{ apartment.status }}] {{ apartment.name }}</mat-card-title>
+    <mat-card-subtitle>{{ apartment.address }}</mat-card-subtitle>
+  </mat-card-header>
+  <img mat-card-image [src]="'https://via.placeholder.com/500x300.png?text=' + apartment.name" alt="Photo of a Shiba Inu">
+  <mat-card-content>
+    <p>Description: {{ apartment.description }}</p>
+    <p>Size: {{ apartment.floorAreaSize }}</p>
+    <p>Price: {{ apartment.pricePerMonth }}</p>
+    <p># of Rooms: {{ apartment.numberOfRooms }}</p>
+    <p>Realtor: {{ apartment?.realtor?.firstname }} {{ apartment.realtor?.lastname }}</p>
+  </mat-card-content>
+  <mat-card-actions *ngIf="userHasEditPermission(apartment) | async">
+    <button mat-button (click)="openDialog('Edit', apartment)">Edit</button>
+    <button mat-button (click)="openDialog('Delete', apartment)">Delete</button>
+  </mat-card-actions>
+</mat-card>

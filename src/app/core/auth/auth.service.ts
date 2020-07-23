@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { BehaviorSubject, Observable } from 'rxjs';
 import { HttpClient } from '@angular/common/http';
 import { environment } from 'src/environments/environment';
-import { tap } from 'rxjs/operators';
+import { tap, map } from 'rxjs/operators';
 import { SignInInput, AuthResponse, UserRole, User, UserData } from '../models';
 import { Router } from '@angular/router';
 import { ApiService } from '../api';
@@ -13,35 +13,34 @@ const CURRENT_USER = '_user';
 @Injectable({
   providedIn: 'root'
 })
-export class AuthService extends ApiService {
+export class AuthService {
 
   isLoggedIn$: BehaviorSubject<boolean> = new BehaviorSubject(false);
-  userRole$: BehaviorSubject<UserRole> = new BehaviorSubject(null);
+  user$: BehaviorSubject<User> = new BehaviorSubject(null);
+  userRole$ = this.user$.asObservable().pipe(map((user: User): UserRole => user.role));
 
   constructor(
-    http$: HttpClient,
+    private apiService: ApiService,
     private router: Router,
   ) {
-    super(http$);
     this.checkAuth();
   }
 
   private checkAuth(): void {
     try {
-      const userRole: User = JSON.parse(localStorage.getItem(CURRENT_USER));
-      if (!userRole) { throw Error('User is not authenticated.'); }
-      this.userRole$.next(userRole.role);
+      const user: User = JSON.parse(localStorage.getItem(CURRENT_USER));
+      if (!user) { throw Error('User is not authenticated.'); }
+      this.user$.next(user);
       const token = this.getToken();
       this.isLoggedIn$.next(!!token);
 
     } catch (error) {
-      console.log(error);
     }
   }
 
   private storeUser({ user, token, }: UserData): void {
     localStorage.setItem(CURRENT_USER, JSON.stringify(user));
-    this.userRole$.next(user.role);
+    this.user$.next(user);
 
     localStorage.setItem(JWT_TOKEN, token);
     this.isLoggedIn$.next(!!token);
@@ -52,7 +51,7 @@ export class AuthService extends ApiService {
   }
 
   login(input: SignInInput): Observable<any> {
-    return this.post<SignInInput, UserData>('users/login', input).pipe(
+    return this.apiService.post<SignInInput, UserData>('users/login', input).pipe(
       // tap(({ success, data }: AuthResponse) => {
       //   if (!!success && !!data?.token && !!data?.user) {
       //     this.storeUser(data);

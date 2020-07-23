@@ -12,29 +12,18 @@
     <span class="toolbar__title">Apartment Management</span>
   </div>
   <div class="toolbar__actions">
-    <button
-      mat-icon-button
-      class="example-icon favorite-icon"
-      aria-label="Example icon-button with heart icon"
-    >
-      <mat-icon>favorite</mat-icon>
-    </button>
-    <button
-      mat-icon-button
-      class="example-icon"
-      aria-label="Example icon-button with share icon"
-    >
-      <mat-icon>share</mat-icon>
-    </button>
   </div>
 </mat-toolbar>
 
 <mat-drawer-container class="sidenav" autosize>
   <mat-drawer #sideNav class="sidenav__drawer" mode="side">
     <mat-list>
-      <mat-list-item> All Apartments </mat-list-item>
-      <mat-list-item *appUserHasRoles="['realtor']" > My Apartments </mat-list-item>
-      <mat-list-item *appUserHasRoles="['admin']"> Users </mat-list-item>
+      <mat-list-item>
+        <a [routerLink]="['']" routerLinkActive="is-active">All Apartments</a>
+      </mat-list-item>
+      <mat-list-item *appUserHasRoles="['admin']">
+        <a [routerLink]="['users']" routerLinkActive="is-active">Users</a>
+      </mat-list-item>
     </mat-list>
   </mat-drawer>
 
