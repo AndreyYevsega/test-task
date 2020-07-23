@@ -35,6 +35,7 @@ export class AuthService {
       this.isLoggedIn$.next(!!token);
 
     } catch (error) {
+      console.log(error);
     }
   }
 

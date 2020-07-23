@@ -1,7 +1,7 @@
 <mat-card>
   <mat-card-title>{{ data.action || 'Add' }} Apartment</mat-card-title>
   <mat-card-content>
-    <form [formGroup]="form">
+    <form [formGroup]="form" *ngIf="form">
       <p class="header">
         <mat-form-field>
           <input
@@ -39,7 +39,7 @@
       <p class="coords">
         <mat-form-field>
           <input
-            type="text"
+            type="number"
             matInput
             placeholder="Longitude"
             formControlName="longitude"
@@ -47,7 +47,7 @@
         </mat-form-field>
         <mat-form-field>
           <input
-            type="text"
+            type="number"
             matInput
             placeholder="Latitude"
             formControlName="latitude"
@@ -58,7 +58,7 @@
       <p class="info">
         <mat-form-field>
           <input
-            type="text"
+            type="number"
             matInput
             placeholder="Size"
             formControlName="floorAreaSize"
@@ -67,7 +67,7 @@
 
         <mat-form-field>
           <input
-            type="text"
+            type="number"
             matInput
             placeholder="Number of Rooms"
             formControlName="numberOfRooms"
@@ -76,7 +76,7 @@
 
         <mat-form-field>
           <input
-            type="text"
+            type="number"
             matInput
             placeholder="Price"
             formControlName="pricePerMonth"
@@ -107,6 +107,16 @@
             formControlName="description"
           />
         </mat-form-field>
+      </p>
+
+      <p style="height: 300px;">
+        <agm-map style="height: 100%;"
+          [latitude]="latitude"
+          [longitude]="longitude"
+          [disableDefaultUI]="false"
+          (mapClick)="onMapClick($event)"
+        >
+        </agm-map>
       </p>
 
       <div class="actions">

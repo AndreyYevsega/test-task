@@ -6,6 +6,7 @@ import { SharedModule } from 'src/app/shared/shared.module';
 import { ApartmentManagementService } from './services';
 import { ApartmentViewComponent } from './components/apartment-view/apartment-view.component';
 import { EditItemModalComponent } from './components/modals/edit-item-modal/edit-item-modal.component';
+import { AgmCoreModule } from '@agm/core';
 
 const routes: Route[] = [
   {
@@ -28,6 +29,9 @@ const routes: Route[] = [
     CommonModule,
     RouterModule.forChild(routes),
     SharedModule,
+    AgmCoreModule.forRoot({
+      apiKey: 'AIzaSyCFchCyZJ7047YRoMWVqHVQnX97KccaJHs'
+    })
   ],
   providers: [
     ApartmentManagementService,

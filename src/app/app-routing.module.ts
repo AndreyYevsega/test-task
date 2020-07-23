@@ -14,22 +14,22 @@ const routes: Routes = [
   },
   {
     path: 'auth',
-    canActivate: [NoAuthGuard],
+    // canActivate: [NoAuthGuard],
     children: [
       {
         path: '',
         component: SignInComponent,
-        canActivate: [NoAuthGuard]
+        // canActivate: [NoAuthGuard]
       },
       {
         path: 'login',
         component: SignInComponent,
-        canActivate: [NoAuthGuard]
+        // canActivate: [NoAuthGuard]
       },
       {
         path: 'register',
         component: SignUpComponent,
-        canActivate: [NoAuthGuard]
+        // canActivate: [NoAuthGuard]
       },
       // {
       //   path: 'logout',
